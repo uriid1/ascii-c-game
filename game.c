@@ -6,149 +6,128 @@
 #define nil -1
 
 // Key Kode
-#define vk_left   68
-#define vk_right  67
-#define vk_up     65
-#define vk_down   66
 #define vk_space  32
 #define vk_enter  10
+int key_pressed;
 
-// Map
-#define wall  "###"
-#define apple " @ "
-#define empty "   "
-#define door  "^^^"
+// Const Color
+const short c_wall   = 1;
+const short c_apple  = 2;
+const short c_door   = 3;
+const short c_space  = 4;
+const short c_life   = 5;
+const short c_player = 6;
+const short c_bullet = 6;
+const short c_enemy  = 7;
+const short c_box    = 8;
 
 // Game Global var
-int level 	 = 1;
-int score    = 0;
-int game_key = 0;
+short level     = 1;
+short score     = 0;
+short lifes	    = 3;
 int bullet_shoot = false;
 
-//////// LEVELS
+// index map object
+#define i_wall   1
+#define i_apple  2
+#define i_door   3
+#define i_space  4
+#define i_life	 5
+#define i_exit   6
+#define i_enemy  7
+#define i_box    8
+#define i_prev   9
+
+
+///////////////////////  MENU
+// MENU
+bool menu = true;
+// logo
+char menu_logo[] = "\t     e Y8b                       888         Y8b Y8b Y888P \n\t    d8b Y8b    888 88e  888 88e  888  ,e e,   Y8b Y8b Y8P   ,8Y88b 888*,8, \n\t   d888b Y8b   888 888b 888 888b 888 d88 88b   Y8b Y8b Y    8  888 888  88  \n\t  d888888888b  888 888P 888 888P 888 888        Y8b Y8b     ee 888 888       \n\t d8888888b Y8b 888 88.  888 88.  888  .YeeP.     Y8P Y      88 888 888       \n\t               888      888 \n\t               888      888    \n\t";
+
+/////////////////////// LEVEL MAPS
+// Map
+short arr_size_x;
+#define s_wall  "###"
+#define s_apple " @ "
+#define s_empty "   "
+#define s_door  "-^-"
+#define s_life  "(+)"
+#define s_enemy "<^>"
+#define s_box   "|=|"
+
 // Lvl 1
 #define lvl_one_x 27
 #define lvl_one_y 20
+short level_one_size = lvl_one_x;
 short lvl_one[lvl_one_y][lvl_one_x] = {
 	// Level one
-	{ 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
-	{ 6, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 1, 5, 5, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 3, 0, 0, 1, 0, 7, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
-	{ 6, 1, 1, 1, 1, 1, 1, 6, 6, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+	{ 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 3, 3, 1 },
+	{ 4, 1, 0, 2, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1 },
+	{ 4, 1, 1, 1, 1, 1, 1, 4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 6, 6, 1 }
 	//
 };
 
 // Lvl 2
-#define lvl_two_x 7
-#define lvl_two_y 9
+#define lvl_two_x 27
+#define lvl_two_y 20
+short level_two_size = lvl_two_x;
 short lvl_two[lvl_two_y][lvl_two_x] = {
 	// Level two
-	{ 6, 1, 1, 1, 1, 1, 1 },
-	{ 6, 1, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 1 },
-	{ 6, 1, 0, 0, 0, 0, 1 },
-	{ 6, 1, 1, 1, 1, 1, 1 }
+	{ 4, 1, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+	{ 4, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 0, 0, 0, 0, 3, 0, 0, 6 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 2, 2, 2, 8, 0, 0, 0, 0, 3, 0, 0, 6 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 2, 2, 2, 8, 0, 0, 0, 0, 1, 1, 1, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 2, 2, 2, 8, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 2, 5, 2, 8, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 2, 2, 2, 8, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 2, 2, 2, 8, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 2, 2, 2, 8, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
 	//
 };
 
-// Get apples from start level
-void calc_apple() {
-	for (int y = 0; y < lvl_one_y; y++) {
-		for (int x = 0; x < lvl_one_x; x++) {
-			if (lvl_one[y][x] == 3) {
-				score = score + 1;
-			}
-		}
-	}
-}
-
-// Open door event
-void open_door() {
-	if (score == 0) {
-		for (int y = 0; y < lvl_one_y; y++) {
-			for (int x = 0; x < lvl_one_x; x++) {
-				if (lvl_one[y][x] == 5) {
-					lvl_one[y][x] = 0;
-				}
-			}
-		}
-	}
-}
-
-// Class
-struct obj {
-	char symbol[20];
-	int x;
-	int y;
-	int direction;
-};
-
-// Create objects
-struct obj player={};
-struct obj bullet={};
-
-// Playes method move
-int dir_x;
-int dir_y;
-int dir_shoot;
-void player_move(int key) {
-
-	// Key check
-	int key_left  = (key == vk_left)  ? 1 : 0;
-	int key_right = (key == vk_right) ? 1 : 0;
-	int key_down  = (key == vk_down)  ? 1 : 0;
-	int key_up    = (key == vk_up)    ? 1 : 0;
-
-	dir_x = key_right - key_left;
-	dir_y = key_down  - key_up;
-
-
-	// Animation and direction shoot
-	if (dir_x == 0 && dir_y == 0) {
-		strcpy(player.symbol, "|0|");
-	} else {
-		if (dir_x == 1)  { dir_shoot =  1; strcpy(player.symbol, "/0/");   }
-		if (dir_x == -1) { dir_shoot = -1; strcpy(player.symbol, "\\0\\"); }
-		if (dir_y == -1) { dir_shoot = -2; strcpy(player.symbol, "/0\\");  }
-		if (dir_y == 1)  { dir_shoot =  2; strcpy(player.symbol, "\\0/");  }
-	}
-
-	player.x = player.x + dir_x;
-	player.y = player.y + dir_y;
-}
-
-// Color
+///////////////////////  COLORSHEME
+// Set color
 void SetColor() {
 	start_color();
-	init_pair(1, COLOR_BLACK,  COLOR_GREEN);	// Bullet
-	init_pair(2, COLOR_WHITE,  COLOR_BLUE);		// Empty
-	init_pair(3, COLOR_BLACK,  COLOR_YELLOW);	
-	init_pair(4, COLOR_WHITE,  COLOR_MAGENTA);
-	init_pair(5, COLOR_YELLOW, COLOR_BLACK); 	// Enemy
-	init_pair(6, COLOR_BLACK,  COLOR_RED); 		// Door
-	init_pair(7, COLOR_BLACK,  COLOR_BLACK); 	// Door
+	init_pair(c_wall,   COLOR_BLUE,     COLOR_BLACK);
+	init_pair(c_apple,  COLOR_WHITE,    COLOR_BLACK);
+	init_pair(c_door,   COLOR_RED,      COLOR_BLACK);	
+	init_pair(c_space,  COLOR_BLACK,    COLOR_BLACK);
+	init_pair(c_life,   COLOR_GREEN,    COLOR_BLACK);
+	init_pair(c_player, COLOR_MAGENTA,  COLOR_BLACK);
+	init_pair(c_bullet, COLOR_GREEN,    COLOR_BLACK);
+	init_pair(c_enemy,  COLOR_BLACK,    COLOR_RED);
+	init_pair(c_box,    COLOR_YELLOW,   COLOR_BLACK);
 }
-
 
 // Draw colored instance
 void draw_instance(int color, char name[]) {
@@ -157,151 +136,375 @@ void draw_instance(int color, char name[]) {
 	attroff(COLOR_PAIR(color));
 }
 
+///////////////////////  OBJECT 
+// Class
+struct class_obj {
+	char symbol[20];
+	int x;
+	int y;
+	int direction;
+};
+
+// Create objects
+struct class_obj player = {};
+struct class_obj bullet = {};
+struct class_obj enemy[5]={};
+
+// Enemy movement
+void enemy_move(short current_lvl[][arr_size_x], int index) {
+	switch(index) {
+		// hsp
+		case 0:
+		case 1:
+		case 2:
+			if (current_lvl[enemy[index].y][enemy[index].x] == i_wall || 
+				current_lvl[enemy[index].y][enemy[index].x] == i_door || 
+				current_lvl[enemy[index].y][enemy[index].x] == i_box)
+			{
+				enemy[index].direction *= -1;
+			}
+			enemy[index].x = enemy[index].x + enemy[index].direction;
+		break;
+
+		// vsp
+		case 3:
+		case 4:
+		case 5:
+			if (current_lvl[enemy[index].y][enemy[index].x] == i_wall || 
+				current_lvl[enemy[index].y][enemy[index].x] == i_door || 
+				current_lvl[enemy[index].y][enemy[index].x] == i_box)
+			{
+				enemy[index].direction *= -1;
+			}
+			enemy[index].y = enemy[index].y + enemy[index].direction;
+		break;
+	}
+}
+
+// set obj Parametrs
+void obj_init(struct class_obj *obj, int x, int y, int dir, char *objname) {
+	obj->x = x;
+	obj->y = y;
+	obj->direction = dir;
+	strcpy(obj->symbol, objname);
+}
+
+/////////////////////// PLAYER
+// Playes method move
+int dir_x;
+int dir_y;
+int dir_shoot;
+void player_move(int key) {
+	// Key check
+	int key_left  = ( key == KEY_LEFT  ) ? 1 : 0;
+	int key_right = ( key == KEY_RIGHT ) ? 1 : 0;
+	int key_down  = ( key == KEY_DOWN  ) ? 1 : 0;
+	int key_up    = ( key == KEY_UP    ) ? 1 : 0;
+
+	// key dir
+	dir_x = key_right - key_left;
+	dir_y = key_down  - key_up;
+
+	// Animation and direction shoot
+	if (dir_x == 0 && dir_y == 0) {
+		strcpy(player.symbol, "|0|");
+	} else {
+		if ( dir_x ==  1 ) { dir_shoot =  1; strcpy(player.symbol, "|0>"  );}
+		if ( dir_x == -1 ) { dir_shoot = -1; strcpy(player.symbol, "<0|"  );}
+		if ( dir_y == -1 ) { dir_shoot = -2; strcpy(player.symbol, "/0\\" );}
+		if ( dir_y ==  1 ) { dir_shoot =  2; strcpy(player.symbol, "\\0/" );}
+	}
+
+	player.x = player.x + dir_x;
+	player.y = player.y + dir_y;
+}
+
+// Collsiion
+void player_collision(short current_lvl[][arr_size_x]) {
+	switch(current_lvl[player.y][player.x]) {
+		case i_wall: // wall
+		case i_box:  // box
+		case i_door: // door
+		case i_space:// space
+			player.x = player.x - dir_x;
+			player.y = player.y - dir_y;
+		break;
+
+		// Apple collision
+		case i_apple:
+			current_lvl[player.y][player.x] = 0;
+			score = score - 1;
+		break;
+
+		// key
+		case i_life:
+			current_lvl[player.y][player.x] = 0;
+			lifes = lifes + 1;
+		break;
+	}
+}
+
+/////////////////////// BULLET
+// Bullet
+void bulet_collision(short current_lvl[][arr_size_x]) {
+	switch(current_lvl[bullet.y][bullet.x]) {
+		case i_wall:
+		case i_door:
+		case i_space:
+			bullet_shoot = false;
+		break;
+	}
+
+	// Kill Box
+	if (current_lvl[bullet.y][bullet.x] == i_box) {
+		current_lvl[bullet.y][bullet.x] = 0;
+		bullet_shoot = false;
+	}
+
+	// Kill Enemy
+	if (bullet_shoot == true) {
+		for (int i = 0; i < 5; i++) {
+			if (bullet.y == enemy[i].y && bullet.x == enemy[i].x) {
+				enemy[i].y = 0;
+				enemy[i].x = 0;
+				bullet_shoot = false;
+			}
+		}
+	}
+}
+
+/////////////////////// LEVELs
+// Get apples from start level
+void calc_apple(short current_lvl[][arr_size_x], int clx, int cly) {
+	for (int y = 0; y < cly; y++) {
+		for (int x = 0; x < clx; x++) {
+			if (current_lvl[y][x] == i_apple) {
+				score = score + 1;
+			}
+		}
+	}
+}
+
+// Set enemy
+void set_enemy(short current_lvl[][arr_size_x], int clx, int cly) {
+	static int i = 0;
+	for (int y = 0; y < cly; y++) {
+		for (int x = 0; x < clx; x++) {
+			if (current_lvl[y][x] == i_enemy) {
+				obj_init(&enemy[i], x, y, 1, "");
+				i++;
+			}
+		}
+	}
+}
+
+// Check next lvl
+bool next_lvl(short current_lvl[][arr_size_x]) {
+	if (current_lvl[player.y][player.x] == i_exit) {
+		score = 0;
+		level = level + 1;
+		return true;
+	} else if (current_lvl[player.y][player.x] == i_prev) {
+		level = level - 1;
+		return true;
+	} else { return false; }
+}
 
 // Draw Current Level
-int current_lvl_x = lvl_one_x;
-int current_lvl_y = lvl_one_y;
-
-int arr_size_x = 27;
+int current_lvl_x;
+int current_lvl_y;
+//
 void draw_level(short lvl[][arr_size_x]) {
+	// Enemy move
+	for (int i = 0; i < 5; i++) { enemy_move(lvl, i); }
+
+	//
 	for (int y = 0; y < current_lvl_y; y++) {
 		for (int x = 0; x < current_lvl_x; x++) {
-
 			switch(lvl[y][x]) {
-				case 1: draw_instance(2, wall);   break;
-				case 3: draw_instance(3, apple);  break;
-				case 5: draw_instance(5, door);   break;
-				case 6: draw_instance(7, "   ");  break;
-				case 7: draw_instance(1, "-->");  break;
+				case i_wall:   draw_instance(c_wall,  s_wall);  break;
+				case i_box:    draw_instance(c_box,   s_box);  break;
+				case i_apple:  draw_instance(c_apple, s_apple); break;
+				case i_door:   draw_instance(c_door,  s_door);  break;
+				case i_space:  draw_instance(c_space, s_empty); break;
+				case i_life:   draw_instance(c_life,  s_life);   break;
 
-				default: 
+				default:
 					// Draw dynamic
 					if (x == player.x && y == player.y) {
-						draw_instance(4, player.symbol);
+						draw_instance(c_player, player.symbol);
 					} else if (x == bullet.x && y == bullet.y) {
 						if (bullet_shoot) {
-							draw_instance(2, " ");
-							draw_instance(1, bullet.symbol);
-							draw_instance(2, " ");
+							draw_instance(c_space, " ");
+							draw_instance(c_bullet, bullet.symbol);
+							draw_instance(c_space, " ");
 						} else {
-							draw_instance(2, empty);
+							draw_instance(c_space, s_empty);
 						}
+					} else if (x == enemy[0].x && y == enemy[0].y) {
+							draw_instance(c_enemy, s_enemy);
+					} else if (x == enemy[1].x && y == enemy[1].y) {
+							draw_instance(c_enemy, s_enemy);
+					} else if (x == enemy[2].x && y == enemy[2].y) {
+							draw_instance(c_enemy, s_enemy);
+					} else if (x == enemy[3].x && y == enemy[3].y) {
+							draw_instance(c_enemy, s_enemy);
+					} else if (x == enemy[4].x && y == enemy[4].y) {
+							draw_instance(c_enemy, s_enemy);
+					} else if (x == enemy[5].x && y == enemy[5].y) {
+							draw_instance(c_enemy, s_enemy);
 					} else {
-						draw_instance(2, empty);
+						draw_instance(c_space, s_empty);
 					}
 				break;
-			}
+			} // End switch
 
+			// Open door
+			if (score == 10) {
+				if (lvl[y][x] == i_door) {
+					lvl[y][x] = 0;
+				}
+			}
 		}
 		printw("\n");
 	}
 }
 
+/////////////////////// GAME
+/// Update game
 void game(int key, short current_lvl[][arr_size_x]) {
-
+	// Player
 	player_move(key);
+	player_collision(current_lvl);
 
-	// refresh();
-	// printw("%d \n", KEY_UP);
-	// endwin();
-	
-	{ // Player Collision
-		if (current_lvl[player.y][player.x] == 1 || 
-			current_lvl[player.y][player.x] == 5)
-		{
-			player.x = player.x - dir_x;
-			player.y = player.y - dir_y;
-		}
-
-		// Eat apple
-		if (current_lvl[player.y][player.x] == 3)
-		{
-			current_lvl[player.y][player.x] = 0;
-			score = score - 1;
-		}
-
-		// Get key
-		if (current_lvl[player.y][player.x] == 7)
-		{
-			current_lvl[player.y][player.x] = 0;
-			game_key = game_key + 1;
-		}
-	}
-
-
-	{ // Bullet collision
-		if (current_lvl[bullet.y][bullet.x] == 1 ||
-			current_lvl[bullet.y][bullet.x] == 5 ||
-			current_lvl[bullet.y][bullet.x] == 6)
-		{
-			bullet_shoot = false;
-		}
-	}
+	// Bullet
+	bulet_collision(current_lvl);
 
 	// Draw map
-	open_door();
-
 	draw_level(current_lvl);
 }
 
+// Init lvl
+void level_init(short index_lvl) {
+	static bool init = true;
+
+	if (init == false) {
+		if (index_lvl == 1) { init = next_lvl(lvl_one); game(key_pressed, lvl_one); }
+		if (index_lvl == 2) { init = next_lvl(lvl_two); game(key_pressed, lvl_two); }
+	} else {
+		switch(index_lvl) {
+			case 1:
+				player.x = 8;
+				player.y = 16;
+				current_lvl_x = lvl_one_x;
+				current_lvl_y = lvl_one_y;
+				arr_size_x = level_one_size;
+				calc_apple(lvl_one, current_lvl_x, current_lvl_y);
+				set_enemy(lvl_one,  current_lvl_x, current_lvl_y);
+				init = false;
+			break;
+
+			case 2:
+				player.x = 3;
+				player.y = 2;
+				current_lvl_x = lvl_two_x;
+				current_lvl_y = lvl_two_y;
+				arr_size_x = level_two_size;
+				calc_apple(lvl_two, current_lvl_x, current_lvl_y);
+				init = false;
+			break;
+		}
+	}
+}
+
+/////////////////////// MAIN
+// main func
 int main(void) {
 
-	calc_apple();
-
-	// Playes
-	strcpy(player.symbol, "|O|");
-	player.x = 5;
-	player.y = 5;
-
+	// init obj
+	// Player
+	obj_init(&player, 5, 5, 0, "|O|");
 	// Bullet
-	strcpy(bullet.symbol, "*");
-	bullet.x = player.x;
-	bullet.y = player.y;
-	int bullet_direction;
+	obj_init(&bullet, player.x, player.x, 0, "*");
 
-	// Keykode check
-	int key_pressed;
+	//obj_init(&enemy[0], 7, 7, 1, "");
+	//obj_init(&enemy[1], 10, 7, 1, "");
 
 	// Start curses mode
 	initscr();
+	keypad(stdscr, TRUE);
 
+	// if not support color
 	if (has_colors() == false) {
         endwin();
         printf("Your terminal does not support color\n");
-        //exit(1);
     }
 
-	// Print it on to the real screen
-	// refresh();
-
 	// Main loop
-	do {
-		SetColor();
+	bool EXIT = false;
+	while (!EXIT) {
 		clear();
+		SetColor();
 
-		printw("\n   apples: %d    key: %d    level: %d \n\n", score, game_key, level);
+		static int menu_item = 0;
+		if (menu == false) {
+			// GAME
+			printw("\n   apples: %d    lifes: %d    level: %d \n\n", score, lifes, level);
+			level_init(level);
 
-		// Main game loop
-		game(key_pressed, lvl_one);
-
-		// Shoot
-		if (!bullet_shoot) {
-				bullet.x = player.x;
-				bullet.y = player.y;
-			if (key_pressed == vk_space) {
-				bullet_direction = dir_shoot;
-				bullet_shoot = true;
+			// Shoot
+			if (!bullet_shoot) {
+					bullet.x = player.x;
+					bullet.y = player.y;
+				if (key_pressed == vk_space) {
+					bullet.direction = dir_shoot;
+					bullet_shoot = true;
+				}
+			} else {
+				switch(bullet.direction) {
+					case  1: bullet.x = bullet.x + 1; break;
+					case -1: bullet.x = bullet.x - 1; break;
+					case  2: bullet.y = bullet.y + 1; break;
+					case -2: bullet.y = bullet.y - 1; break;
+				}
 			}
 		} else {
-			switch(bullet_direction) {
-				case  1: bullet.x = bullet.x + 1; break;
-				case -1: bullet.x = bullet.x - 1; break;
-				case  2: bullet.y = bullet.y + 1; break;
-				case -2: bullet.y = bullet.y - 1; break;
+			// MENU
+			if (key_pressed == KEY_UP)   menu_item--;
+			if (key_pressed == KEY_DOWN) menu_item++;
+			if (menu_item >= 2) { menu_item = 2; }
+			if (menu_item <= 0) { menu_item = 0; }
+
+			printw("\n\n");
+			draw_instance(c_wall, menu_logo);
+
+			printw("\n\n\n\n");
+			printw("\t\t\t\t  %s \n\n",  menu_item == 0 ? "    > START GAME <" : "      start game");
+			printw("\t\t\t\t\t %s \n\n", menu_item == 1 ? "> INFO <" : "  info");
+			printw("\t\t\t\t\t %s \n\n", menu_item == 2 ? "> EXIT <" : "  exit");
+
+			printw("\n\n\n\n\n\n");
+			printw(" %s", "Develop: uriid1");
+
+			if (key_pressed == vk_enter) { 
+				switch(menu_item) {
+					case 0:
+						menu = false;
+					break;
+
+					case 1:
+					break;
+
+					case 2:
+						endwin();
+						EXIT = true;					
+					break;
+				}
 			}
 		}
-
-	} while ((key_pressed = getch()) != 'q');
+		key_pressed = getch();
+		//refresh();
+	}
 
 	// End curses mode
 	endwin();
