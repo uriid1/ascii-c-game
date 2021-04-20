@@ -39,6 +39,7 @@ cd ascii-c-game
 chmod +x game.sh
 ./game.sh
 ```
+
 # For MacOs
 ```shell
 brew install ncurses
