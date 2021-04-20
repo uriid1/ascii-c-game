@@ -1,3 +1,10 @@
+///******************************//#
+///# Author: by uriid1			#//#
+///# license: GNU GPL			#//#
+///# telegram: uriid1			#//#
+///# Mail: appdurov@gmail.com	#//#
+//##****************************####
+
 #include <stdio.h>
 #include <string.h>
 #include <ncurses.h>
@@ -22,6 +29,7 @@ const short c_enemy  = 7;
 const short c_box    = 8;
 
 // Game Global var
+bool EXIT = false;
 short level     = 1;
 short score     = 0;
 short lifes	    = 3;
@@ -36,8 +44,6 @@ int bullet_shoot = false;
 #define i_exit   6
 #define i_enemy  7
 #define i_box    8
-#define i_prev   9
-
 
 ///////////////////////  MENU
 // MENU
@@ -91,7 +97,7 @@ short lvl_one[lvl_one_y][lvl_one_x] = {
 short level_two_size = lvl_two_x;
 short lvl_two[lvl_two_y][lvl_two_x] = {
 	// Level two
-	{ 4, 1, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+	{ 4, 1, 4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 	{ 4, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 	{ 4, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 	{ 4, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
@@ -110,6 +116,152 @@ short lvl_two[lvl_two_y][lvl_two_x] = {
 	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+	//
+};
+
+// Lvl 3
+#define lvl_three_x 27
+#define lvl_three_y 20
+short level_three_size = lvl_two_x;
+short lvl_three[lvl_three_y][lvl_three_x] = {
+	// Level three
+	{ 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 1, 1, 1, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 1, 7, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 1, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 1, 1, 0, 0, 0, 2, 2, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 4, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 2, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1 ,7, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+	//
+};
+
+
+// Lvl 4
+#define lvl_fo_x 27
+#define lvl_fo_y 20
+short level_fo_size = lvl_fo_x;
+short lvl_fo[lvl_fo_y][lvl_fo_x] = {
+	// Level three
+	{ 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 8, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 8, 2, 2, 2, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 8, 2, 7, 2, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 8, 2, 2, 2, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 8, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 2, 2, 2, 8, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 2, 7, 2, 8, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 2, 2, 2, 8, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 1, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 1, 1, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+	//
+};
+
+// Lvl 5
+#define lvl_five_x 27
+#define lvl_five_y 20
+short level_five_size = lvl_five_x;
+short lvl_five[lvl_five_y][lvl_five_x] = {
+	// Level three
+	{ 4, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+	{ 4, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 1, 6, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 1, 6, 0, 3, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 1, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 0, 1 },
+	{ 4, 1, 0, 2, 1, 1, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 5, 8, 2, 1 },
+	{ 4, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2 ,0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
+	//
+};
+
+
+// Lvl 6
+#define lvl_six_x 27
+#define lvl_six_y 20
+short level_six_size = lvl_six_x;
+short lvl_six[lvl_six_y][lvl_six_x] = {
+	// Level three
+	{ 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 1, 1, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1 },
+	{ 4, 1, 0, 0, 2, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 1, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1 },
+	{ 4, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 6 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 7, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 7, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 2, 0, 1, 1, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 1, 0, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 2, 1 },
+	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1 },
+	{ 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 1, 1, 1 }
+	//
+};
+
+#define lvl_win_x 27
+#define lvl_win_y 20
+short level_win_size = lvl_win_x;
+short lvl_win[lvl_win_y][lvl_win_x] = {
+	// Level three
+	{ 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+	{ 4, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+	{ 4, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+	{ 4, 1, 2, 1, 2, 2, 1, 2, 2, 1, 1, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+	{ 4, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+	{ 4, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+	{ 4, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+	{ 4, 1, 2, 1, 1, 1, 1, 2, 2, 1, 1, 2, 2, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+	{ 4, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+	{ 4, 1, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+	{ 4, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+	{ 4, 1, 2, 2, 1, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2, 2, 2, 1 },
+	{ 4, 1, 2, 1, 2, 2, 2, 2, 1, 2, 1, 2, 1, 2, 2, 2, 1, 1, 2, 1, 2, 1, 2, 2, 2, 2, 1 },
+	{ 4, 1, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 2, 2, 2, 2, 1 },
+	{ 4, 1, 2, 2, 2, 2, 2, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1 },
+	{ 4, 1, 2, 2, 2, 2, 2, 2, 1, 1, 2, 1, 1, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2, 2, 2, 1 },
+	{ 4, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+	{ 4, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 ,2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
+	{ 4, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
 	{ 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }
 	//
 };
@@ -163,7 +315,7 @@ void enemy_move(short current_lvl[][arr_size_x], int index) {
 			{
 				enemy[index].direction *= -1;
 			}
-			enemy[index].x = enemy[index].x + enemy[index].direction;
+			enemy[index].y = enemy[index].y + enemy[index].direction;
 		break;
 
 		// vsp
@@ -176,10 +328,20 @@ void enemy_move(short current_lvl[][arr_size_x], int index) {
 			{
 				enemy[index].direction *= -1;
 			}
-			enemy[index].y = enemy[index].y + enemy[index].direction;
+			enemy[index].x = enemy[index].x + enemy[index].direction;
 		break;
 	}
 }
+
+// Enemy clear
+void clear_enemy() {
+	for (int i = 0; i < 5; i++) {
+		enemy[i].y = 0;
+		enemy[i].x = 0;
+		enemy[i].direction = 0;
+	}
+}
+
 
 // set obj Parametrs
 void obj_init(struct class_obj *obj, int x, int y, int dir, char *objname) {
@@ -222,10 +384,10 @@ void player_move(int key) {
 // Collsiion
 void player_collision(short current_lvl[][arr_size_x]) {
 	switch(current_lvl[player.y][player.x]) {
-		case i_wall: // wall
-		case i_box:  // box
-		case i_door: // door
-		case i_space:// space
+		case i_wall: 	// wall
+		case i_box:  	// box
+		case i_door: 	// door
+		case i_space:	// space
 			player.x = player.x - dir_x;
 			player.y = player.y - dir_y;
 		break;
@@ -241,6 +403,13 @@ void player_collision(short current_lvl[][arr_size_x]) {
 			current_lvl[player.y][player.x] = 0;
 			lifes = lifes + 1;
 		break;
+	}
+
+	// Enemy collision
+	for (int i = 0; i < 5; i++) {
+		if (player.y == enemy[i].y && player.x == enemy[i].x) {
+			lifes = lifes - 1; 
+		}
 	}
 }
 
@@ -267,6 +436,7 @@ void bulet_collision(short current_lvl[][arr_size_x]) {
 			if (bullet.y == enemy[i].y && bullet.x == enemy[i].x) {
 				enemy[i].y = 0;
 				enemy[i].x = 0;
+				enemy[i].direction = 0;
 				bullet_shoot = false;
 			}
 		}
@@ -274,29 +444,25 @@ void bulet_collision(short current_lvl[][arr_size_x]) {
 }
 
 /////////////////////// LEVELs
-// Get apples from start level
-void calc_apple(short current_lvl[][arr_size_x], int clx, int cly) {
+// Set enemy and calck apple
+void set_lvl_param(short current_lvl[][arr_size_x], int clx, int cly) {
+	static int i = 0;
 	for (int y = 0; y < cly; y++) {
 		for (int x = 0; x < clx; x++) {
 			if (current_lvl[y][x] == i_apple) {
 				score = score + 1;
 			}
-		}
-	}
-}
 
-// Set enemy
-void set_enemy(short current_lvl[][arr_size_x], int clx, int cly) {
-	static int i = 0;
-	for (int y = 0; y < cly; y++) {
-		for (int x = 0; x < clx; x++) {
 			if (current_lvl[y][x] == i_enemy) {
 				obj_init(&enemy[i], x, y, 1, "");
 				i++;
+				if (i >=5) { i = 0; }
 			}
 		}
 	}
+
 }
+
 
 // Check next lvl
 bool next_lvl(short current_lvl[][arr_size_x]) {
@@ -304,10 +470,9 @@ bool next_lvl(short current_lvl[][arr_size_x]) {
 		score = 0;
 		level = level + 1;
 		return true;
-	} else if (current_lvl[player.y][player.x] == i_prev) {
-		level = level - 1;
-		return true;
-	} else { return false; }
+	}
+
+	return false;
 }
 
 // Draw Current Level
@@ -360,7 +525,7 @@ void draw_level(short lvl[][arr_size_x]) {
 			} // End switch
 
 			// Open door
-			if (score == 10) {
+			if (score == 0) {
 				if (lvl[y][x] == i_door) {
 					lvl[y][x] = 0;
 				}
@@ -371,6 +536,13 @@ void draw_level(short lvl[][arr_size_x]) {
 }
 
 /////////////////////// GAME
+// Game Over
+void game_over() {
+	EXIT = true;
+	endwin();
+    printf("Game Over!\n");
+}
+
 /// Update game
 void game(int key, short current_lvl[][arr_size_x]) {
 	// Player
@@ -382,6 +554,9 @@ void game(int key, short current_lvl[][arr_size_x]) {
 
 	// Draw map
 	draw_level(current_lvl);
+
+	// Over
+	if (lifes <= 0) { game_over(); }
 }
 
 // Init lvl
@@ -389,8 +564,13 @@ void level_init(short index_lvl) {
 	static bool init = true;
 
 	if (init == false) {
-		if (index_lvl == 1) { init = next_lvl(lvl_one); game(key_pressed, lvl_one); }
-		if (index_lvl == 2) { init = next_lvl(lvl_two); game(key_pressed, lvl_two); }
+		if (index_lvl == 1) { init = next_lvl(lvl_one);   game(key_pressed, lvl_one); 	}
+		if (index_lvl == 2) { init = next_lvl(lvl_two);   game(key_pressed, lvl_two); 	}
+		if (index_lvl == 3) { init = next_lvl(lvl_three); game(key_pressed, lvl_three); }
+		if (index_lvl == 4) { init = next_lvl(lvl_fo);	  game(key_pressed, lvl_fo);	}
+		if (index_lvl == 5) { init = next_lvl(lvl_five);  game(key_pressed, lvl_five);	}
+		if (index_lvl == 6) { init = next_lvl(lvl_six);   game(key_pressed, lvl_six);	}
+		if (index_lvl == 7) { init = next_lvl(lvl_win);   game(key_pressed, lvl_win);	}
 	} else {
 		switch(index_lvl) {
 			case 1:
@@ -399,8 +579,8 @@ void level_init(short index_lvl) {
 				current_lvl_x = lvl_one_x;
 				current_lvl_y = lvl_one_y;
 				arr_size_x = level_one_size;
-				calc_apple(lvl_one, current_lvl_x, current_lvl_y);
-				set_enemy(lvl_one,  current_lvl_x, current_lvl_y);
+				clear_enemy();
+				set_lvl_param(lvl_one, current_lvl_x, current_lvl_y);
 				init = false;
 			break;
 
@@ -410,7 +590,63 @@ void level_init(short index_lvl) {
 				current_lvl_x = lvl_two_x;
 				current_lvl_y = lvl_two_y;
 				arr_size_x = level_two_size;
-				calc_apple(lvl_two, current_lvl_x, current_lvl_y);
+				clear_enemy();
+				set_lvl_param(lvl_two, current_lvl_x, current_lvl_y);
+				init = false;
+			break;
+
+			case 3:
+				player.x = 2;
+				player.y = 6;
+				current_lvl_x = lvl_three_x;
+				current_lvl_y = lvl_three_y;
+				arr_size_x = level_three_size;
+				clear_enemy();
+				set_lvl_param(lvl_three, current_lvl_x, current_lvl_y);
+				init = false;
+			break;
+
+			case 4:
+				player.x = 22;
+				player.y = 1;
+				current_lvl_x = lvl_fo_x;
+				current_lvl_y = lvl_fo_y;
+				arr_size_x = level_fo_size;
+				clear_enemy();
+				set_lvl_param(lvl_fo, current_lvl_x, current_lvl_y);
+				init = false;
+			break;
+
+			case 5:
+				player.x = 4;
+				player.y = 1;
+				current_lvl_x = lvl_five_x;
+				current_lvl_y = lvl_five_y;
+				arr_size_x = level_five_size;
+				clear_enemy();
+				set_lvl_param(lvl_five, current_lvl_x, current_lvl_y);
+				init = false;
+			break;
+
+			case 6:
+				player.x = 8;
+				player.y = 13;
+				current_lvl_x = lvl_six_x;
+				current_lvl_y = lvl_six_y;
+				arr_size_x = level_six_size;
+				clear_enemy();
+				set_lvl_param(lvl_six, current_lvl_x, current_lvl_y);
+				init = false;
+			break;
+
+			case 7:
+				player.x = 23;
+				player.y = 5;
+				current_lvl_x = lvl_win_x;
+				current_lvl_y = lvl_win_y;
+				arr_size_x = level_win_size;
+				clear_enemy();
+				set_lvl_param(lvl_win, current_lvl_x, current_lvl_y);
 				init = false;
 			break;
 		}
@@ -427,9 +663,6 @@ int main(void) {
 	// Bullet
 	obj_init(&bullet, player.x, player.x, 0, "*");
 
-	//obj_init(&enemy[0], 7, 7, 1, "");
-	//obj_init(&enemy[1], 10, 7, 1, "");
-
 	// Start curses mode
 	initscr();
 	keypad(stdscr, TRUE);
@@ -441,7 +674,6 @@ int main(void) {
     }
 
 	// Main loop
-	bool EXIT = false;
 	while (!EXIT) {
 		clear();
 		SetColor();
@@ -502,8 +734,11 @@ int main(void) {
 				}
 			}
 		}
+
+		//
 		key_pressed = getch();
-		//refresh();
+
+		if (key_pressed == 'q') { menu = true; }
 	}
 
 	// End curses mode

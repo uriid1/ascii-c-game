@@ -1,3 +1,3 @@
 clear
-gcc game.c -o game -Wno-unused -lncurses -Wall
-./game
+gcc game.c -o AppleWar -Wno-unused -lncurses -Wall
+./AppleWar
