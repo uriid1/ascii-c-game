@@ -155,7 +155,7 @@ short lvl_three[lvl_three_y][lvl_three_x] = {
 #define lvl_fo_y 20
 short level_fo_size = lvl_fo_x;
 short lvl_fo[lvl_fo_y][lvl_fo_x] = {
-	// Level three
+	// Level fo
 	{ 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1 },
 	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1 },
 	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1 },
@@ -184,7 +184,7 @@ short lvl_fo[lvl_fo_y][lvl_fo_x] = {
 #define lvl_five_y 20
 short level_five_size = lvl_five_x;
 short lvl_five[lvl_five_y][lvl_five_x] = {
-	// Level three
+	// Level five
 	{ 4, 1, 1, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 	{ 4, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
 	{ 4, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
@@ -214,7 +214,7 @@ short lvl_five[lvl_five_y][lvl_five_x] = {
 #define lvl_six_y 20
 short level_six_size = lvl_six_x;
 short lvl_six[lvl_six_y][lvl_six_x] = {
-	// Level three
+	// Level six
 	{ 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 1, 1, 1 },
 	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1 },
 	{ 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1 },
@@ -238,11 +238,13 @@ short lvl_six[lvl_six_y][lvl_six_x] = {
 	//
 };
 
+
+// lvl win
 #define lvl_win_x 27
 #define lvl_win_y 20
 short level_win_size = lvl_win_x;
 short lvl_win[lvl_win_y][lvl_win_x] = {
-	// Level three
+	// Level win
 	{ 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
 	{ 4, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
 	{ 4, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1 },
