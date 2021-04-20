@@ -32,7 +32,7 @@ const short c_box    = 8;
 bool EXIT = false;
 short level     = 1;
 short score     = 0;
-short lifes	    = 3;
+short lifes	= 3;
 int bullet_shoot = false;
 
 // index map object
