@@ -18,3 +18,33 @@ Have a good game!
 ## Screenshots
 ![Screenshot](https://github.com/uriid1/scrfmp/blob/main/AppleWar/lvl0.png)
 ![Screenshot](https://github.com/uriid1/scrfmp/blob/main/AppleWar/lvl5.png)
+
+## Running
+* You must have Ncurses and gcc installed to work.
+
+# For Ubuntu / Debian based
+```shell
+sudo apt-get install libncurses5-dev
+git clone https://github.com/uriid1/ascii-c-game
+cd ascii-c-game
+chmod +x game.sh
+./game.sh
+```
+
+# For Arch based
+```shell
+sudo pacman -S ncurses
+git clone https://github.com/uriid1/ascii-c-game
+cd ascii-c-game
+chmod +x game.sh
+./game.sh
+```
+# For MacOs
+```shell
+brew install ncurses
+git clone https://github.com/uriid1/ascii-c-game
+cd ascii-c-game
+chmod +x game.sh
+./game.sh
+```
+
