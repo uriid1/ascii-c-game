@@ -13,11 +13,14 @@
 
 This is a small game written in C. <br />
 Your task is to collect all the apples while avoiding enemies. <br />
+I do not recommend using the source code for learning C.
+I wrote this game just for fun :)
 
-Movement:<br />
+## Movement:<br />
  arrows for move <br />
  space for shot <br />
-
+ q open menu <br />
+ 
 Have a good game!
 
 ## Screenshots
