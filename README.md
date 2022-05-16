@@ -17,9 +17,9 @@ I do not recommend using the source code for learning C.
 I wrote this game just for fun :)
 
 ## Movement:<br />
- arrows for move <br />
- space for shot <br />
- q open menu <br />
+ Arrows - move <br />
+ Space - shot <br />
+ q - open menu <br />
  
 Have a good game!
 
