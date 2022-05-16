@@ -15,13 +15,12 @@ This is a small game written in C. <br />
 Your task is to collect all the apples while avoiding enemies. <br />
 I do not recommend using the source code for learning C.
 I wrote this game just for fun :)
+Have a good game!
 
 ## Movement:<br />
  Arrows - move <br />
  Space - shot <br />
  q - open menu <br />
- 
-Have a good game!
 
 ## Screenshots
 ![Screenshot](https://github.com/uriid1/scrfmp/blob/main/AppleWar/lvl0.png)
