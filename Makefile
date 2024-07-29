@@ -6,12 +6,12 @@
 ####--------------------------------####
 
 # Del old
-if [ -f AppleWar ]; then
+install:
+	gcc game.c -o AppleWar -Wno-unused -lncurses
+	echo ===============
+	./AppleWar
+
+clean:
 	rm AppleWar
-fi
 
-# Build new
-gcc game.c -o AppleWar -Wno-unused -lncurses
-
-# Run
-./AppleWar
+.PHONY: install clear
